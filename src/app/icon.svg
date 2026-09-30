@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40">
+  <!-- Favicon TEMPORAIRE — à remplacer par le logo officiel -->
+  <rect width="40" height="40" rx="10" fill="#FAF7F0"/>
+  <rect x="16" y="5" width="8" height="13" rx="4" fill="#8EB55C"/>
+  <rect x="16" y="22" width="8" height="13" rx="4" fill="#8EB55C" opacity=".55"/>
+  <rect x="5" y="16" width="13" height="8" rx="4" fill="#8EB55C" opacity=".55"/>
+  <rect x="22" y="16" width="13" height="8" rx="4" fill="#8EB55C"/>
+  <circle cx="20" cy="20" r="2.8" fill="#15301F"/>
+</svg>

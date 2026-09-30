@@ -1,0 +1,135 @@
+@import "tailwindcss";
+
+/* ------------------------------------------------------------------
+ * Design system — Pharmacie des Buttes Blanches
+ * Couleur signature : #8EB55C
+ * ------------------------------------------------------------------ */
+@theme {
+  /* Vert signature et déclinaisons */
+  --color-brand: #8eb55c;
+  --color-brand-soft: #b7d092;
+  --color-brand-strong: #4a7328; /* texte/lien vert — contraste AA sur blanc et crème */
+  --color-brand-hover: #7fa84d;
+
+  /* Forêt — titres et footer */
+  --color-forest: #15301f;
+  --color-forest-soft: #274634;
+
+  /* Fonds */
+  --color-sage: #eef4e6;
+  --color-sage-deep: #dce7cc;
+  --color-cream: #faf7f0;
+  --color-sand: #efe7d8;
+
+  /* Neutres */
+  --color-line: #e6e3db;
+  --color-ink: #1d2320;
+  --color-muted: #5a6158;
+
+  /* États de formulaire */
+  --color-danger: #b42318;
+  --color-danger-soft: #fdf1ef;
+
+  --font-sans: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-dm-serif), ui-serif, Georgia, serif;
+
+  --radius-card: 1.5rem; /* 24px */
+  --radius-card-lg: 1.75rem; /* 28px */
+  --radius-field: 1.125rem; /* 18px */
+
+  --shadow-soft: 0 1px 2px rgb(21 48 31 / 0.04), 0 8px 24px -12px rgb(21 48 31 / 0.12);
+  --shadow-lift: 0 2px 4px rgb(21 48 31 / 0.04), 0 24px 48px -24px rgb(21 48 31 / 0.25);
+
+  --ease-soft: cubic-bezier(0.22, 1, 0.36, 1);
+
+  --animate-fade-in: fade-in 0.3s var(--ease-soft) both;
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background: var(--color-white);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    color: var(--color-forest);
+    text-wrap: balance;
+    letter-spacing: -0.02em;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  ::selection {
+    background: var(--color-brand-soft);
+    color: var(--color-forest);
+  }
+
+  /* Focus visible homogène sur tout le site */
+  :focus-visible {
+    outline: 2px solid var(--color-brand-strong);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+
+  /* Décalage des ancres sous le header sticky */
+  [id] {
+    scroll-margin-top: 7rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@utility container-site {
+  width: 100%;
+  max-width: 80rem;
+  margin-inline: auto;
+  padding-inline: 1.25rem;
+  @media (width >= 48rem) {
+    padding-inline: 2rem;
+  }
+  @media (width >= 80rem) {
+    padding-inline: 2.5rem;
+  }
+}
+
+@utility section-y {
+  padding-block: 4.5rem;
+  @media (width >= 48rem) {
+    padding-block: 6rem;
+  }
+  @media (width >= 64rem) {
+    padding-block: 7.5rem;
+  }
+}
