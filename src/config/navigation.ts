@@ -41,7 +41,7 @@ export const mainNav: NavItem[] = [
 export const footerInfoLinks: NavLink[] = [
   { label: "FAQ", href: "/faq" },
   { label: "Expédition et retours", href: "/expedition-retours" },
+  { label: "Mentions légales", href: "/mentions-legales" },
   { label: "Politique de confidentialité", href: "/politique-de-confidentialite" },
   { label: "Politique de cookies", href: "/politique-de-cookies" },
-  { label: "Mentions légales", href: "/mentions-legales" },
 ];

@@ -1,9 +1,9 @@
-import { Clock, Mail, MapPin, Phone } from "lucide-react";
+import { CalendarDays, Clock, Mail, MapPin, Navigation, Phone } from "lucide-react";
 import Link from "next/link";
 import { Logo } from "@/components/brand/Logo";
 import { SmartLink } from "@/components/ui/SmartLink";
 import { footerInfoLinks } from "@/config/navigation";
-import { FALLBACK_TEXT, formatAddress, isConfigured, pharmacy, telHref } from "@/config/pharmacy";
+import { directionsUrl, groupedOpeningHours, isConfigured, mailHref, pharmacy, telHref } from "@/config/pharmacy";
 import { CurrentYear } from "./CurrentYear";
 
 const quickLinks = [
@@ -22,7 +22,6 @@ function ColumnTitle({ children }: { children: string }) {
 }
 
 export function Footer() {
-  const address = formatAddress();
   const socials = Object.entries(pharmacy.social).filter(([, url]) => isConfigured(url));
 
   return (
@@ -36,44 +35,54 @@ export function Footer() {
       </svg>
 
       <div className="container-site relative pt-20 pb-10 md:pt-24">
-        <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-[1.3fr_1fr_1fr_0.9fr_1.1fr] lg:gap-10">
+        <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-[1.3fr_1.1fr_1.2fr_0.9fr_1.1fr] lg:gap-10">
           <div>
             <Logo tone="light" />
-            <p className="mt-6 max-w-xs text-[0.95rem] leading-relaxed text-white/70">
-              Votre pharmacie de proximité à {pharmacy.address.city}. Conseil, accompagnement et services pensés pour
-              votre quotidien.
-            </p>
+            <address className="mt-7 space-y-1 text-[0.95rem] leading-relaxed text-white/70 not-italic">
+              <span className="block font-semibold text-white">{pharmacy.name}</span>
+              <span className="block">{pharmacy.address.street}</span>
+              <span className="block">
+                {pharmacy.address.postalCode} {pharmacy.address.city}
+              </span>
+            </address>
+            <a
+              href={directionsUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-brand-soft transition-colors hover:text-white"
+            >
+              <Navigation aria-hidden className="size-4" />
+              Itinéraire
+              <span className="sr-only"> (ouvre Google Maps dans un nouvel onglet)</span>
+            </a>
           </div>
 
           <div>
-            <ColumnTitle>Nous trouver</ColumnTitle>
+            <ColumnTitle>Nous contacter</ColumnTitle>
             <ul className="space-y-4 text-[0.95rem]">
-              <li className="flex gap-3">
-                <MapPin aria-hidden className="mt-0.5 size-4.5 shrink-0 text-brand" />
-                <span className="text-white/70">
-                  {address ?? (
-                    <>
-                      {pharmacy.address.postalCode} {pharmacy.address.city}
-                      <span className="block text-sm text-white/45">Adresse complète : {FALLBACK_TEXT.toLowerCase()}</span>
-                    </>
-                  )}
-                </span>
-              </li>
               <li className="flex gap-3">
                 <Phone aria-hidden className="mt-0.5 size-4.5 shrink-0 text-brand" />
                 <a href={telHref} className={linkClass}>
                   {pharmacy.phone.display}
                 </a>
               </li>
-              <li className="flex gap-3">
+              <li className="flex min-w-0 gap-3">
                 <Mail aria-hidden className="mt-0.5 size-4.5 shrink-0 text-brand" />
-                {isConfigured(pharmacy.email) ? (
-                  <a href={`mailto:${pharmacy.email}`} className={linkClass}>
-                    {pharmacy.email}
-                  </a>
-                ) : (
-                  <span className="text-white/45">E-mail : {FALLBACK_TEXT.toLowerCase()}</span>
-                )}
+                <a href={mailHref} className={linkClass} title={pharmacy.email}>
+                  Écrire un e-mail
+                </a>
+              </li>
+              <li className="flex gap-3">
+                <CalendarDays aria-hidden className="mt-0.5 size-4.5 shrink-0 text-brand" />
+                <SmartLink href={pharmacy.links.doctolib} className={linkClass}>
+                  Rendez-vous sur Doctolib
+                </SmartLink>
+              </li>
+              <li className="flex gap-3">
+                <MapPin aria-hidden className="mt-0.5 size-4.5 shrink-0 text-brand" />
+                <Link href="/contact" className={linkClass}>
+                  Formulaire de contact
+                </Link>
               </li>
             </ul>
           </div>
@@ -81,12 +90,16 @@ export function Footer() {
           <div>
             <ColumnTitle>Horaires</ColumnTitle>
             <ul className="space-y-3 text-[0.95rem]">
-              {pharmacy.openingHours.map((slot) => (
-                <li key={slot.days} className="flex gap-3">
+              {groupedOpeningHours().map((slot) => (
+                <li key={slot.label} className="flex gap-3">
                   <Clock aria-hidden className="mt-0.5 size-4.5 shrink-0 text-brand" />
                   <span>
-                    <span className="block text-white/90">{slot.days}</span>
-                    <span className="text-white/55">{isConfigured(slot.hours) ? slot.hours : FALLBACK_TEXT}</span>
+                    <span className="block text-white/90">{slot.label}</span>
+                    {slot.slots.map((label) => (
+                      <span key={label} className="block whitespace-nowrap text-white/60">
+                        {label}
+                      </span>
+                    ))}
                   </span>
                 </li>
               ))}
@@ -99,7 +112,7 @@ export function Footer() {
               <ul className="space-y-3 text-[0.95rem]">
                 {quickLinks.map((l) => (
                   <li key={l.label}>
-                    <SmartLink href={l.href} className={linkClass} disabledHint="Lien Doctolib bientôt disponible">
+                    <SmartLink href={l.href} className={linkClass}>
                       {l.label}
                     </SmartLink>
                   </li>
@@ -121,9 +134,9 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-16 flex flex-col gap-4 border-t border-white/10 pt-8 text-sm text-white/50 md:flex-row md:items-center md:justify-between">
+        <div className="mt-16 flex flex-col gap-4 border-t border-white/10 pt-8 text-sm text-white/55 lg:flex-row lg:items-center lg:justify-between">
           <p>
-            © <CurrentYear /> {pharmacy.name}. Tous droits réservés.
+            © <CurrentYear /> {pharmacy.name} — {pharmacy.legal.companyName}
           </p>
           {socials.length > 0 && (
             <ul className="flex gap-4">
@@ -138,6 +151,11 @@ export function Footer() {
           )}
           <p>Pour toute question médicale, adressez-vous directement à votre pharmacien.</p>
         </div>
+
+        <p className="mt-6 text-xs tracking-wide text-white/45">
+          Conception &amp; développement —{" "}
+          <span className="font-serif text-[0.85rem] tracking-normal text-brand-soft">{pharmacy.credits.designer}</span>
+        </p>
       </div>
     </footer>
   );

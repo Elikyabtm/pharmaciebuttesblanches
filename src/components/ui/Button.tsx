@@ -1,8 +1,8 @@
 import { ArrowRight, type LucideIcon } from "lucide-react";
 import type { ButtonHTMLAttributes, ReactNode } from "react";
-import { TODO } from "@/config/pharmacy";
+import { isConfigured } from "@/config/pharmacy";
 import { cn } from "@/lib/utils";
-import { SmartLink } from "./SmartLink";
+import { SmartLink, SoonBadge } from "./SmartLink";
 
 type Variant = "primary" | "secondary" | "ghost" | "light";
 type Size = "md" | "lg";
@@ -58,19 +58,20 @@ export function ButtonLink({
   children,
   disabledHint,
   "aria-label": ariaLabel,
-}: CommonProps & { href: string | typeof TODO; disabledHint?: string; "aria-label"?: string }) {
+}: CommonProps & { href: string; disabledHint?: string; "aria-label"?: string }) {
+  const ready = isConfigured(href);
   return (
     <SmartLink
       href={href}
       className={buttonClasses(variant, size, className)}
-      // Lien non configuré : on garde le rendu de marque, sans action (curseur + info-bulle)
-      disabledClassName="cursor-not-allowed"
+      // Lien non configuré : rendu atténué + pastille « Bientôt », sans action
+      disabledClassName="cursor-not-allowed opacity-75 saturate-50"
       disabledHint={disabledHint}
       aria-label={ariaLabel}
     >
       {Icon && <Icon aria-hidden className="size-4.5 shrink-0" />}
       {children}
-      {arrow && <CtaArrow />}
+      {ready ? arrow && <CtaArrow /> : <SoonBadge />}
     </SmartLink>
   );
 }

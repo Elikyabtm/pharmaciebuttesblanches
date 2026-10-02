@@ -4,6 +4,7 @@ import { RequestForm } from "@/components/forms/RequestForm";
 import { FormSection } from "@/components/sections/FormSection";
 import { HelpAside } from "@/components/sections/HelpAside";
 import { PageHero } from "@/components/sections/PageHero";
+import { images } from "@/config/images";
 import type { FieldConfig } from "@/lib/forms";
 import { cn } from "@/lib/utils";
 
@@ -31,6 +32,7 @@ export function PilulierRequestPage({ crumb, title, description, formId, fields,
         title={title}
         description={description}
         tone="sage"
+        image={images.pillbox}
         breadcrumb={[{ label: "Pilulier", href: "/pilulier" }, { label: crumb }]}
       >
         <nav aria-label="Changer de profil">

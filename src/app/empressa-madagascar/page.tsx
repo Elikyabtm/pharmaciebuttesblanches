@@ -1,4 +1,4 @@
-import { ClipboardList, MessageSquareText, PackageCheck, Phone } from "lucide-react";
+import { ClipboardList, Info, MessageSquareText, PackageCheck, Phone } from "lucide-react";
 import { HealthDataNotice } from "@/components/forms/HealthDataNotice";
 import { RequestForm } from "@/components/forms/RequestForm";
 import { FormSection } from "@/components/sections/FormSection";
@@ -8,9 +8,8 @@ import { Breadcrumb } from "@/components/ui/Breadcrumb";
 import { ButtonLink } from "@/components/ui/Button";
 import { RevealImage } from "@/components/ui/RevealImage";
 import { Eyebrow, SectionHeading } from "@/components/ui/SectionHeading";
-import { TodoContent } from "@/components/ui/TodoContent";
 import { images } from "@/config/images";
-import { telHref } from "@/config/pharmacy";
+import { pharmacy, telHref } from "@/config/pharmacy";
 import { empressaForm } from "@/data/forms";
 import { createMetadata } from "@/lib/seo";
 
@@ -97,14 +96,23 @@ export default function EmpressaPage() {
               ))}
             </ol>
 
-            <AnimatedSection>
-              {/* TODO_REPLACE : texte officiel du service Empressa */}
-              <TodoContent title="Présentation détaillée du service Empressa">
-                <p>
-                  Décrire ici le fonctionnement réel du service : types de produits acceptés, délais, tarifs, zones
-                  desservies à Madagascar, conditions de dépôt et de retrait.
+            {/* Les modalités détaillées (produits acceptés, délais, tarifs) ne sont pas publiées :
+                ne les ajouter ici qu'à partir des informations fournies par la pharmacie. */}
+            <AnimatedSection className="flex gap-4 rounded-card border border-line bg-white p-6 sm:p-7">
+              <span className="flex size-11 shrink-0 items-center justify-center rounded-full bg-sage text-brand-strong">
+                <Info aria-hidden className="size-5" strokeWidth={1.6} />
+              </span>
+              <div className="text-[0.95rem] leading-relaxed text-muted">
+                <p className="font-bold text-forest">Modalités du service</p>
+                <p className="mt-2">
+                  Types de produits acceptés, délais d&apos;acheminement et tarifs dépendent de chaque envoi : ils vous
+                  sont présentés par l&apos;équipe lors de l&apos;étude de votre demande. Pour toute question, appelez-nous au{" "}
+                  <a href={telHref} className="font-semibold whitespace-nowrap text-forest underline underline-offset-2">
+                    {pharmacy.phone.display}
+                  </a>
+                  .
                 </p>
-              </TodoContent>
+              </div>
             </AnimatedSection>
           </div>
         </div>

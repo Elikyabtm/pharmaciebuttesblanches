@@ -6,7 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import { LogoMark } from "@/components/brand/Logo";
 import { CtaArrow } from "@/components/ui/Button";
 import { SmartLink } from "@/components/ui/SmartLink";
-import { isConfigured, pharmacy, telHref, TODO } from "@/config/pharmacy";
+import { pharmacy } from "@/config/pharmacy";
 
 /**
  * Assistant de NAVIGATION (pas de conseil médical).
@@ -15,10 +15,8 @@ import { isConfigured, pharmacy, telHref, TODO } from "@/config/pharmacy";
 type QuickReply = {
   label: string;
   answer: string;
-  cta: { label: string; href: string | typeof TODO };
+  cta: { label: string; href: string };
 };
-
-const doctolibReady = isConfigured(pharmacy.links.doctolib);
 
 const quickReplies: QuickReply[] = [
   {
@@ -43,16 +41,17 @@ const quickReplies: QuickReply[] = [
   },
   {
     label: "Prendre rendez-vous",
-    answer: doctolibReady
-      ? "Vous pouvez prendre rendez-vous en ligne directement sur Doctolib."
-      : `La prise de rendez-vous en ligne arrive bientôt. En attendant, appelez-nous au ${pharmacy.phone.display}.`,
-    cta: doctolibReady
-      ? { label: "Ouvrir Doctolib", href: pharmacy.links.doctolib }
-      : { label: "Appeler la pharmacie", href: telHref },
+    answer: "Vous pouvez prendre rendez-vous en ligne avec la pharmacie sur Doctolib.",
+    cta: { label: "Ouvrir Doctolib", href: pharmacy.links.doctolib },
+  },
+  {
+    label: "Horaires",
+    answer: "Nous sommes ouverts du lundi au samedi. Retrouvez le détail des horaires et l'adresse sur la page contact.",
+    cta: { label: "Voir les horaires", href: "/contact#horaires" },
   },
   {
     label: "Contacter la pharmacie",
-    answer: "Téléphone, SMS, WhatsApp ou formulaire : choisissez le moyen qui vous convient.",
+    answer: `Appelez-nous au ${pharmacy.phone.display}, écrivez-nous ou utilisez le formulaire en ligne.`,
     cta: { label: "Nous contacter", href: "/contact" },
   },
 ];

@@ -1,12 +1,13 @@
 import type { LucideIcon } from "lucide-react";
 import { Globe, Pill, ShoppingBag, Truck } from "lucide-react";
-import { pharmacy, TODO } from "@/config/pharmacy";
+import { pharmacy } from "@/config/pharmacy";
 
 export type Service = {
   title: string;
   description: string;
   cta: string;
-  href: string | typeof TODO;
+  /** Vide = lien pas encore configuré (carte affichée « Bientôt disponible ») */
+  href: string;
   icon: LucideIcon;
 };
 

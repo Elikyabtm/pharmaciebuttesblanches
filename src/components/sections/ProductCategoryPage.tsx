@@ -1,12 +1,13 @@
-import { MessageCircle, ShoppingBag } from "lucide-react";
+import { MessageCircle, Phone, ShoppingBag } from "lucide-react";
 import { ProductCategoryCard } from "@/components/cards/ProductCategoryCard";
+import { CounselSplit } from "@/components/sections/CounselSplit";
 import { CTASection } from "@/components/sections/CTASection";
 import { PageHero } from "@/components/sections/PageHero";
 import { ShopBanner } from "@/components/sections/ShopBanner";
 import { AnimatedSection } from "@/components/ui/AnimatedSection";
 import { ButtonLink } from "@/components/ui/Button";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { pharmacy } from "@/config/pharmacy";
+import { isConfigured, pharmacy, telHref } from "@/config/pharmacy";
 import { productCategories, type ProductCategory } from "@/data/products";
 
 /** Page catégorie générique : utilisée par les 6 univers produits. */
@@ -24,15 +25,15 @@ export function ProductCategoryPage({ category }: { category: ProductCategory })
         breadcrumb={[{ label: "Nos produits", href: "/produits" }, { label: category.name }]}
       >
         <div className="flex flex-col gap-3 sm:flex-row">
-          <ButtonLink
-            href={pharmacy.links.shop}
-            icon={ShoppingBag}
-            size="lg"
-            arrow
-            disabledHint="Lien de la boutique bientôt disponible"
-          >
-            Acheter en ligne
-          </ButtonLink>
+          {isConfigured(pharmacy.links.shop) ? (
+            <ButtonLink href={pharmacy.links.shop} icon={ShoppingBag} size="lg" arrow>
+              Acheter en ligne
+            </ButtonLink>
+          ) : (
+            <ButtonLink href={telHref} icon={Phone} size="lg">
+              {pharmacy.phone.display}
+            </ButtonLink>
+          )}
           <ButtonLink href="/contact" size="lg" variant="secondary" icon={MessageCircle}>
             Demander conseil
           </ButtonLink>
@@ -75,6 +76,13 @@ export function ProductCategoryPage({ category }: { category: ProductCategory })
           </AnimatedSection>
         </div>
       </section>
+
+      <CounselSplit
+        eyebrow="Besoin d'un avis ?"
+        title="Choisir avec les conseils de l'équipe"
+        text={`Une question sur un produit de l'univers ${category.name.toLowerCase()} ? Notre équipe vous écoute et vous oriente, au comptoir comme par téléphone.`}
+        detail={{ ...category.image, position: "80% 50%" }}
+      />
 
       <ShopBanner categoryName={category.name} />
 

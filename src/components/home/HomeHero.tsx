@@ -35,13 +35,16 @@ export function HomeHero() {
           transition={{ duration: 1.2, ease: EASE }}
         >
           <Image
-            src={images.hero.src}
-            alt={images.hero.alt}
+            src={images.counsel.src}
+            alt={images.counsel.alt}
             fill
             preload
             sizes="(min-width: 1024px) 58vw, 100vw"
             className="object-cover"
+            style={{ objectPosition: images.counsel.position }}
           />
+          {/* Voile très léger pour la lisibilité des pastilles */}
+          <div aria-hidden className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-forest/25 to-transparent" />
           <div className="absolute right-4 bottom-4 left-4 flex flex-wrap items-end justify-between gap-3 sm:right-6 sm:bottom-6 sm:left-6">
             <p className="rounded-full bg-white/90 px-4 py-2.5 text-[0.78rem] font-semibold tracking-wide text-forest backdrop-blur">
               Conseil <span aria-hidden className="mx-1 text-brand">•</span> Proximité{" "}

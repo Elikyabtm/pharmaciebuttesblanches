@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { formatAddress, isConfigured, pharmacy } from "@/config/pharmacy";
+import { isConfigured, pharmacy } from "@/config/pharmacy";
 
 type PageMeta = {
   title: string;
@@ -28,29 +28,37 @@ export function createMetadata({ title, description, path }: PageMeta): Metadata
 
 /**
  * Données structurées schema.org/Pharmacy.
- * N'inclut QUE les informations réelles renseignées dans src/config/pharmacy.ts :
+ * N'inclut QUE les informations réelles de src/config/pharmacy.ts :
  * aucune note, aucun avis, aucune donnée inventée.
  */
 export function pharmacyJsonLd() {
-  const { address, map } = pharmacy;
-  const hasGeo = isConfigured(map.latitude) && isConfigured(map.longitude);
+  const { address, legal } = pharmacy;
 
   return {
     "@context": "https://schema.org",
     "@type": "Pharmacy",
     name: pharmacy.name,
+    legalName: legal.companyName,
     description: pharmacy.description,
     url: pharmacy.siteUrl,
     telephone: pharmacy.phone.e164,
-    ...(isConfigured(pharmacy.email) ? { email: pharmacy.email } : {}),
+    email: pharmacy.email,
+    vatID: legal.vatNumber,
     address: {
       "@type": "PostalAddress",
-      ...(formatAddress() ? { streetAddress: address.street } : {}),
+      streetAddress: address.street,
       postalCode: address.postalCode,
       addressLocality: address.city,
       addressCountry: address.country,
     },
-    ...(hasGeo ? { geo: { "@type": "GeoCoordinates", latitude: map.latitude, longitude: map.longitude } } : {}),
-    // TODO_REPLACE : ajouter `openingHoursSpecification` une fois les horaires réels renseignés.
+    openingHoursSpecification: pharmacy.openingHours.flatMap((d) =>
+      d.slots.map(([opens, closes]) => ({
+        "@type": "OpeningHoursSpecification",
+        dayOfWeek: `https://schema.org/${d.key}`,
+        opens,
+        closes,
+      })),
+    ),
+    sameAs: [pharmacy.links.doctolib, ...Object.values(pharmacy.social)].filter((u) => isConfigured(u)),
   };
 }

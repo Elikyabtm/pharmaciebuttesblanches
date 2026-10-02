@@ -127,3 +127,13 @@ export const contactForm: FieldConfig[] = [
   { name: "objet", label: "Objet", type: "text", required: true, full: true },
   { ...message(), required: true },
 ];
+
+/** Registre des formulaires : utilisé pour la validation côté serveur et l'objet des e-mails. */
+export const formsById: Record<string, { title: string; fields: FieldConfig[] }> = {
+  livraison: { title: "Demande de livraison", fields: deliveryForm },
+  "pilulier-ehpad": { title: "Demande pilulier — EHPAD", fields: pilulierEhpadForm },
+  "pilulier-infirmier": { title: "Demande pilulier — Infirmier·ère", fields: pilulierInfirmierForm },
+  "pilulier-particulier": { title: "Demande pilulier — Particulier", fields: pilulierParticulierForm },
+  empressa: { title: "Demande Empressa Madagascar", fields: empressaForm },
+  contact: { title: "Message depuis le formulaire de contact", fields: contactForm },
+};

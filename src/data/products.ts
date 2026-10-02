@@ -5,10 +5,9 @@ import { images, type SiteImage } from "@/config/images";
 /**
  * Univers produits.
  *
- * Les sous-catégories ci-dessous sont des FAMILLES GÉNÉRIQUES servant à
- * structurer les pages (PLACEHOLDER — à valider avec la pharmacie). Elles ne
- * désignent aucune référence ni marque réellement vendue, et ne constituent
- * pas des recommandations de santé.
+ * Les sous-catégories reprennent les familles présentées en officine
+ * (signalétique des espaces). Elles ne citent aucune référence ni marque,
+ * et ne constituent pas des recommandations de santé.
  */
 
 export type ProductSubcategory = {
@@ -38,10 +37,10 @@ export const productCategories: ProductCategory[] = [
     icon: Leaf,
     image: images.herboristerie,
     subcategories: [
-      { title: "Tisanes & infusions", description: "Des plantes à infuser pour vos moments de pause." },
-      { title: "Plantes en vrac", description: "Une sélection de plantes séchées, conseillées au comptoir." },
-      { title: "Huiles essentielles", description: "À utiliser avec précaution : demandez conseil à l'équipe." },
-      { title: "Gemmothérapie & autres", description: "D'autres produits naturels à découvrir en pharmacie." },
+      { title: "Plantes", description: "Une sélection de plantes séchées, présentées et conseillées au comptoir." },
+      { title: "Infusions & tisanes", description: "Des plantes à infuser pour vos moments de pause." },
+      { title: "Huiles essentielles", description: "À utiliser avec précaution : demandez toujours conseil à l'équipe." },
+      { title: "Compléments naturels", description: "Des produits d'origine végétale, à découvrir avec nos conseils." },
     ],
   },
   {
@@ -53,10 +52,10 @@ export const productCategories: ProductCategory[] = [
     icon: Sparkles,
     image: images.parapharmacie,
     subcategories: [
-      { title: "Soins du visage", description: "Nettoyants, hydratants et soins ciblés." },
-      { title: "Soins du corps", description: "Laits, huiles et crèmes pour tous les jours." },
+      { title: "Dermo-cosmétique", description: "Des soins pour le visage et le corps, choisis pour leur qualité." },
+      { title: "Soins quotidiens", description: "Nettoyer, hydrater, protéger : les gestes de tous les jours." },
       { title: "Cheveux", description: "Shampooings et soins adaptés à chaque type de cheveux." },
-      { title: "Solaires", description: "Protection de la peau au soleil, toute l'année." },
+      { title: "Conseil personnalisé", description: "L'équipe vous oriente vers les soins adaptés à votre peau." },
     ],
   },
   {
@@ -68,10 +67,10 @@ export const productCategories: ProductCategory[] = [
     icon: Droplets,
     image: images.hygieneSoins,
     subcategories: [
-      { title: "Hygiène bucco-dentaire", description: "Brosses à dents, dentifrices et accessoires." },
-      { title: "Hygiène corporelle", description: "Gels douche, savons doux et déodorants." },
-      { title: "Premiers soins", description: "Pansements, compresses et trousse de secours." },
-      { title: "Hygiène intime", description: "Des produits doux et adaptés." },
+      { title: "Soins quotidiens", description: "Les essentiels de la salle de bain pour toute la famille." },
+      { title: "Fraîcheur", description: "Hygiène bucco-dentaire, déodorants et produits rafraîchissants." },
+      { title: "Confort", description: "Des produits doux pour les peaux sensibles." },
+      { title: "Premiers soins", description: "Pansements, compresses et trousse familiale." },
     ],
   },
   {
@@ -83,10 +82,10 @@ export const productCategories: ProductCategory[] = [
     icon: PillBottle,
     image: images.complements,
     subcategories: [
-      { title: "Vitalité", description: "Des produits pour accompagner votre quotidien." },
-      { title: "Sommeil & détente", description: "Une sélection à découvrir avec nos conseils." },
-      { title: "Articulations", description: "Des références choisies par l'équipe." },
-      { title: "Beauté", description: "Cheveux, peau et ongles." },
+      { title: "Vitalité & équilibre", description: "Une sélection à découvrir avec les conseils de l'équipe." },
+      { title: "Nutrition", description: "Des compléments à associer à une alimentation variée." },
+      { title: "Bien-être", description: "Des produits choisis pour accompagner votre quotidien." },
+      { title: "Conseil avant tout", description: "Demandez l'avis de votre pharmacien avant toute utilisation." },
     ],
   },
   {
@@ -98,10 +97,10 @@ export const productCategories: ProductCategory[] = [
     icon: Stethoscope,
     image: images.materielMedical,
     subcategories: [
-      { title: "Automesure", description: "Tensiomètres, thermomètres et appareils de mesure." },
-      { title: "Maintien à domicile", description: "Aides techniques pour le confort au quotidien." },
-      { title: "Orthopédie", description: "Chevillères, genouillères et contention — sur conseil." },
-      { title: "Aide à la mobilité", description: "Cannes, déambulateurs et accessoires." },
+      { title: "Maintien à domicile", description: "Des équipements pour faciliter la vie à la maison." },
+      { title: "Confort", description: "Fauteuils, coussins et aides au repos." },
+      { title: "Mobilité", description: "Cannes, déambulateurs et fauteuils roulants." },
+      { title: "Autonomie", description: "Des aides techniques pour les gestes du quotidien." },
     ],
   },
   {
@@ -113,10 +112,10 @@ export const productCategories: ProductCategory[] = [
     icon: Baby,
     image: images.bebeEnfant,
     subcategories: [
-      { title: "Toilette & change", description: "Soins lavants, liniments et crèmes pour le change." },
+      { title: "Soins", description: "Hydratation et protection de la peau délicate des tout-petits." },
+      { title: "Hygiène", description: "Toilette et change, avec des produits doux." },
       { title: "Alimentation", description: "Biberons, tétines et accessoires de repas." },
-      { title: "Soins du quotidien", description: "Hydratation et protection de la peau délicate." },
-      { title: "Maman", description: "Des produits pour accompagner la grossesse et l'allaitement." },
+      { title: "Puériculture & éveil", description: "Accessoires du quotidien et jouets d'éveil." },
     ],
   },
 ];

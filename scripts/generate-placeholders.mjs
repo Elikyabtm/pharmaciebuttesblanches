@@ -251,7 +251,9 @@ const images = {
 };
 
 await mkdir(OUT, { recursive: true });
-for (const [name, svg] of Object.entries(images)) {
+// Seuls ces visuels sont encore utilisés (les autres ont été remplacés par des photos)
+const USED = ["delivery", "madagascar"];
+for (const [name, svg] of Object.entries(images).filter(([n]) => USED.includes(n))) {
   const file = path.join(OUT, `${name}.webp`);
   await sharp(Buffer.from(svg)).webp({ quality: 82 }).toFile(file);
   console.log("✓", path.relative(process.cwd(), file));

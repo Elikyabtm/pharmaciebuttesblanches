@@ -1,10 +1,12 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import { CheckCircle2, CircleAlert, LoaderCircle, ShieldCheck } from "lucide-react";
+import { CheckCircle2, CircleAlert, LoaderCircle, Mail, ShieldCheck } from "lucide-react";
 import Link from "next/link";
 import { useId, useRef, useState, type FormEvent, type ReactNode } from "react";
-import { Button } from "@/components/ui/Button";
+import { Button, buttonClasses } from "@/components/ui/Button";
+import { pharmacy, telHref } from "@/config/pharmacy";
+import { formsById } from "@/data/forms";
 import {
   submitRequest,
   validateField,
@@ -16,7 +18,7 @@ import {
 import { cn } from "@/lib/utils";
 import { FormField } from "./FormField";
 
-type Status = "idle" | "submitting" | "success" | "error";
+type Status = "idle" | "submitting" | "success" | "mailto" | "error";
 
 type RequestFormProps = {
   /** Identifiant du formulaire (transmis au service d'envoi) */
@@ -52,6 +54,7 @@ export function RequestForm({
   const [consentError, setConsentError] = useState<string>();
   const [status, setStatus] = useState<Status>("idle");
   const [submitError, setSubmitError] = useState<string>();
+  const [mailtoHref, setMailtoHref] = useState<string>();
 
   const submitting = status === "submitting";
 
@@ -76,7 +79,7 @@ export function RequestForm({
     if ((form.elements.namedItem("website") as HTMLInputElement | null)?.value) return;
 
     const nextErrors = validateForm(fields, values);
-    const nextConsentError = consent ? undefined : "Merci d'accepter l'utilisation de vos données pour traiter la demande.";
+    const nextConsentError = consent ? undefined : "Merci de confirmer avoir pris connaissance de la politique de confidentialité.";
     setErrors(nextErrors);
     setConsentError(nextConsentError);
 
@@ -91,9 +94,15 @@ export function RequestForm({
 
     setStatus("submitting");
     setSubmitError(undefined);
-    const result = await submitRequest(formId, values);
-    if (result.ok) {
+    const title = formsById[formId]?.title ?? "Demande depuis le site";
+    const result = await submitRequest(formId, title, fields, values, pharmacy.email);
+    if (result.status === "sent") {
       setStatus("success");
+      requestAnimationFrame(() => successRef.current?.focus());
+    } else if (result.status === "mailto") {
+      setMailtoHref(result.href);
+      setStatus("mailto");
+      window.location.href = result.href;
       requestAnimationFrame(() => successRef.current?.focus());
     } else {
       setStatus("error");
@@ -114,7 +123,7 @@ export function RequestForm({
   return (
     <div className={cn("rounded-card-lg border border-line bg-white p-6 shadow-soft sm:p-8 lg:p-10", className)}>
       <AnimatePresence mode="wait" initial={false}>
-        {status === "success" ? (
+        {status === "success" || status === "mailto" ? (
           <motion.div
             key="success"
             ref={successRef}
@@ -127,13 +136,38 @@ export function RequestForm({
             className="flex flex-col items-center py-10 text-center outline-none"
           >
             <span className="flex size-16 items-center justify-center rounded-full bg-sage text-brand-strong">
-              <CheckCircle2 aria-hidden className="size-8" strokeWidth={1.6} />
+              {status === "mailto" ? (
+                <Mail aria-hidden className="size-8" strokeWidth={1.6} />
+              ) : (
+                <CheckCircle2 aria-hidden className="size-8" strokeWidth={1.6} />
+              )}
             </span>
-            <h3 className="mt-6 text-2xl font-bold">{successTitle}</h3>
-            <p className="mt-3 max-w-md text-muted">{successMessage}</p>
-            <Button variant="secondary" className="mt-8" onClick={reset}>
-              Envoyer une autre demande
-            </Button>
+            {status === "mailto" ? (
+              <>
+                <h3 className="mt-6 text-2xl font-bold">Dernière étape : envoyez l&apos;e-mail</h3>
+                <p className="mt-3 max-w-md text-muted">
+                  Votre messagerie s&apos;ouvre avec votre demande pré-remplie, adressée à {pharmacy.email}. Il vous
+                  suffit de l&apos;envoyer. Rien ne s&apos;est ouvert ?
+                </p>
+                <div className="mt-8 flex flex-col items-center gap-3 sm:flex-row">
+                  <a href={mailtoHref} className={buttonClasses("primary", "md")}>
+                    <Mail aria-hidden className="size-4.5" />
+                    Ouvrir ma messagerie
+                  </a>
+                  <a href={telHref} className={buttonClasses("secondary", "md")}>
+                    Appeler le {pharmacy.phone.display}
+                  </a>
+                </div>
+              </>
+            ) : (
+              <>
+                <h3 className="mt-6 text-2xl font-bold">{successTitle}</h3>
+                <p className="mt-3 max-w-md text-muted">{successMessage}</p>
+                <Button variant="secondary" className="mt-8" onClick={reset}>
+                  Envoyer une autre demande
+                </Button>
+              </>
+            )}
           </motion.div>
         ) : (
           <motion.form
@@ -205,8 +239,11 @@ export function RequestForm({
                   className="mt-0.5 size-5 shrink-0 cursor-pointer rounded-md accent-(--color-brand-strong)"
                 />
                 <span>
-                  J&apos;accepte que mes informations soient utilisées par la pharmacie uniquement pour traiter ma
-                  demande. <Link href="/politique-de-confidentialite" className="font-semibold text-brand-strong underline underline-offset-2">En savoir plus</Link>
+                  J&apos;ai pris connaissance de la{" "}
+                  <Link href="/politique-de-confidentialite" className="font-semibold text-brand-strong underline underline-offset-2">
+                    politique de confidentialité
+                  </Link>
+                  : mes informations sont utilisées par la pharmacie uniquement pour traiter ma demande.
                   <span aria-hidden className="text-brand-strong"> *</span>
                 </span>
               </label>
@@ -238,7 +275,7 @@ export function RequestForm({
         )}
       </AnimatePresence>
 
-      {notice && status !== "success" && (
+      {notice && status !== "success" && status !== "mailto" && (
         <div className="mt-8 rounded-2xl bg-cream p-4 text-[0.82rem] leading-relaxed text-muted">{notice}</div>
       )}
     </div>

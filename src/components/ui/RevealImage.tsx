@@ -37,6 +37,7 @@ export function RevealImage({ image, sizes, className, imageClassName, preload }
           sizes={sizes}
           preload={preload}
           className={cn("object-cover", imageClassName)}
+          style={{ objectPosition: image.position }}
         />
       </motion.div>
     </div>

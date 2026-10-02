@@ -15,17 +15,23 @@ npm run build && npm start
 
 | Besoin | Fichier |
 |---|---|
-| Coordonnées, horaires, liens Doctolib / boutique / WhatsApp, carte | `src/config/pharmacy.ts` |
+| Coordonnées, horaires, Doctolib, boutique, WhatsApp/SMS, informations légales, hébergeur | `src/config/pharmacy.ts` |
 | Images (remplacer les visuels temporaires) | `src/config/images.ts`, voir `docs/IMAGES.md` |
 | Menus et liens du footer | `src/config/navigation.ts` |
 | Univers produits et sous-catégories | `src/data/products.ts` |
 | Cartes services de l'accueil | `src/data/services.ts` |
 | Champs des formulaires | `src/data/forms.ts` |
-| Envoi des formulaires (actuellement simulé) | `src/lib/forms.ts` → `submitRequest` |
+| Envoi des formulaires | `src/app/api/demande/route.ts` + `src/lib/forms.ts` |
 | Couleurs, typographies, rayons (design system) | `src/app/globals.css` (`@theme`) |
 
-Toutes les informations manquantes sont marquées **`TODO_REPLACE`** : `grep -rn TODO_REPLACE src`.
-Un lien externe qui vaut encore `TODO_REPLACE` est désactivé proprement : il n'envoie jamais vers `#`.
+Une valeur vide (`""`) dans `pharmacy.ts` signifie « non configuré ». Le canal correspondant (WhatsApp, SMS, réseaux sociaux) n'est alors pas affiché, ou le lien est désactivé proprement (boutique en ligne). Aucun lien ne pointe vers `#`.
+
+## Variables d'environnement (Vercel → Settings → Environment Variables)
+
+Voir `.env.example`.
+
+- `NEXT_PUBLIC_SITE_URL` : domaine définitif (SEO, sitemap). À défaut, le domaine de production Vercel est utilisé.
+- `RESEND_API_KEY` et `FORM_FROM_EMAIL` (facultatif) : envoi des formulaires par e-mail via [Resend](https://resend.com). Sans elles, la messagerie du visiteur s'ouvre avec la demande pré-remplie, adressée à la pharmacie. La politique de confidentialité s'adapte automatiquement au mode utilisé (redéploiement nécessaire après modification).
 
 ## Principes
 
@@ -33,7 +39,7 @@ Un lien externe qui vaut encore `TODO_REPLACE` est désactivé proprement : il n
 - **Données de santé** : les formulaires ne demandent aucune information médicale. Avant d'en collecter, il faudra une solution conforme (hébergeur HDS).
 - **Aucune donnée inventée** : pas d'avis, de note, d'ancienneté ni de marque partenaire fictifs.
 - **Accessibilité** : HTML sémantique, focus visible, navigation au clavier, `prefers-reduced-motion` respecté, contrastes AA (le vert `#8EB55C` sert de fond sous du texte vert forêt ; le texte vert utilise `#4A7328`).
-- **Carte** : chargée seulement au clic (OpenStreetMap). Elle ne ralentit pas la page.
+- **Carte** : Google Maps, chargée seulement après un clic sur « Afficher la carte » (consentement). Le site ne dépose aucun cookie : pas de bandeau nécessaire. Tout ajout d'outil de mesure d'audience ou de contenu tiers devra passer par un vrai consentement préalable.
 
 ## Structure
 

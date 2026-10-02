@@ -38,6 +38,7 @@ export function ProductCategoryCard({
           fill
           sizes={sizes}
           className="object-cover transition-transform duration-[1.2s] ease-(--ease-soft) group-hover/card:scale-[1.04]"
+          style={{ objectPosition: category.image.position }}
         />
         <span className="absolute top-4 left-4 inline-flex items-center gap-2 rounded-full bg-white/90 px-3.5 py-2 text-xs font-semibold text-forest backdrop-blur">
           <Icon aria-hidden className="size-3.5 text-brand-strong" strokeWidth={1.8} />
