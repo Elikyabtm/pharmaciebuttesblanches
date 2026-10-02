@@ -3,8 +3,7 @@
  *
  * - Photographies : public/images/photos/ (direction photo commune : lumière
  *   naturelle, tons crème et verts, pharmacie contemporaine).
- * - Visuels TEMPORAIRES (`placeholder: true`) : public/images/placeholders/,
- *   à remplacer par des photos — voir docs/IMAGES.md (prompts de génération inclus).
+ * - Liste complète et emplacements : docs/IMAGES.md.
  *
  * Pour remplacer une image : déposer le fichier dans public/images/ puis
  * modifier `src`, `alt` et éventuellement `position` ci-dessous.
@@ -15,21 +14,12 @@ export type SiteImage = {
   alt: string;
   /** Point focal pour les recadrages (CSS object-position) */
   position?: string;
-  /** true tant qu'il s'agit d'un visuel temporaire */
-  placeholder: boolean;
 };
 
 const photo = (file: string, alt: string, position = "50% 50%"): SiteImage => ({
   src: `/images/photos/${file}.webp`,
   alt,
   position,
-  placeholder: false,
-});
-
-const ph = (file: string, alt: string): SiteImage => ({
-  src: `/images/placeholders/${file}.webp`,
-  alt,
-  placeholder: true,
 });
 
 export const images = {
@@ -42,8 +32,6 @@ export const images = {
   complements: photo("complements", "Compléments alimentaires et plantes présentés en pharmacie", "45% 60%"),
   materielMedical: photo("materiel-medical", "Espace matériel médical : fauteuil, déambulateur et aides au confort", "58% 55%"),
   bebeEnfant: photo("bebe-enfant", "Univers bébé : peluche, linge doux et soins pour les tout-petits", "22% 55%"),
-
-  // Visuels temporaires (à remplacer — voir docs/IMAGES.md)
-  delivery: ph("delivery", "Sac de la pharmacie prêt à être livré à domicile"),
-  madagascar: ph("madagascar", "Baobab et colis évoquant les envois vers Madagascar"),
+  delivery: photo("livraison", "Une pharmacienne remet un colis de la pharmacie à une cliente, devant le véhicule de livraison", "58% 45%"),
+  madagascar: photo("empressa", "Espace Madagascar de la pharmacie : affiche de baobabs, vanille, savons et produits naturels", "55% 55%"),
 } satisfies Record<string, SiteImage>;
